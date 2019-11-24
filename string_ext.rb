@@ -1,11 +1,8 @@
 class String
-  def humanize(lower_case_and_underscored_word, capitalize: true, keep_id_suffix: false)
-    result = lower_case_and_underscored_word.to_s.dup
+  def humanize(capitalize: true)
+    result = self.to_s.dup
 
     result.sub!(/\A_+/, "")
-    unless keep_id_suffix
-      result.sub!(/_id\z/, "")
-    end
     result.tr!("_", " ")
 
     if capitalize
@@ -26,7 +23,7 @@ class String
   end
 
   def titleize(keep_id_suffix: false)
-    humanize(underscore, keep_id_suffix: keep_id_suffix).gsub(/\b(?<!\w['’`])[a-z]/) do |match|
+    underscore.humanize.gsub(/\b(?<!\w['’`])[a-z]/) do |match|
       match.capitalize
     end
   end
