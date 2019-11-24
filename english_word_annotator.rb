@@ -1,6 +1,6 @@
 require 'open_nlp'
 
-english_words = File.read('/Users/nathan/misc/rc-gen/words-short')
+english_words = File.read('/Users/nathan/misc/rc-gen/words_alpha.txt')
 pos_model = OpenNlp::Model::POSTagger.new(File.join("/Users/nathan/misc/rc-gen/en-pos-maxent.bin"))
 pos_tagger = OpenNlp::POSTagger.new(pos_model)
 result = pos_tagger.tag(english_words)
