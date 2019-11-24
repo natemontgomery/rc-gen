@@ -17,4 +17,7 @@ pos_choices = prompt.collect do
   end
 end
 
-RcNameGen.new(word_count: word_count, pos_list: pos_choices.values).print_name
+RcNameGen.new(
+  word_count: word_count,
+  pos_list: pos_choices.values.map { |pos| pos.downcase.to_sym }
+).print_name
