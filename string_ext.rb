@@ -5,8 +5,8 @@ class String
       gsub(/([a-z\d])([A-Z])/, '\1_\2').
       downcase.
       sub(/\A_+/, "").
-      sub(/\A\w/) { |match| match.upcase }.
-      gsub(/\b(?<!\w['’`])[a-z]/) do |match|
+      sub(/\A[\w-]/) { |match| match.upcase }.
+      gsub(/\b(?<![\w-]['’`])[a-z]/) do |match|
         match.capitalize
       end
   end
