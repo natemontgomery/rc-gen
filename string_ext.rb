@@ -1,9 +1,6 @@
 class String
   def humanize(capitalize: true)
-    result = self.to_s.dup
-
-    result.sub!(/\A_+/, "")
-    result.tr!("_", " ")
+    result = to_s.dup.sub(/\A_+/, "").tr("_", " ")
 
     if capitalize
       result.sub!(/\A\w/) { |match| match.upcase }
@@ -13,13 +10,11 @@ class String
   end
 
   def underscore
-    return self unless /[A-Z-]|::/.match?(self)
-    word = self.gsub("::", "/")
-    word.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
-    word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
-    word.tr!("-", "_")
-    word.downcase!
-    word
+    gsub("::", "/").
+      gsub(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2').
+      gsub(/([a-z\d])([A-Z])/, '\1_\2').
+      tr("-", "_").
+      downcase
   end
 
   def titleize(keep_id_suffix: false)
