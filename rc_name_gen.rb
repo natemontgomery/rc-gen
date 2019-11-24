@@ -1,4 +1,5 @@
 require 'pry'
+require_relative './string_ext'
 
 class RcNameGen
   PARTS_OF_SPEECH = [
@@ -51,10 +52,10 @@ class RcNameGen
 
   def words_hash
     granular_word_hash = annotated_words.each_with_object({}) do |defined_word, memo|
-      descriptors = defined_word.split(' ')
-      word = descriptors[0].to_s.gsub(/^.+\d.+/, '')
-      pos = descriptors[1].to_s.gsub('—', '')
-      next unless pos[-1] == '.' # all our PoS end in a period
+      raw_descriptors = defined_word.split('.')[0].to_s
+      descriptors = raw_descriptors.split(' ')
+      word = descriptors[0..-2].join('-').to_s.gsub(/\d$/, '')
+      pos = descriptors[-1].to_s.gsub('—', '') << '.'
 
       memo[pos] ||= []
       memo[pos] << word
@@ -66,7 +67,7 @@ class RcNameGen
   def map_granular_pos(word_list)
     PARTS_OF_SPEECH.each_with_object({}) do |pos, memo|
       self.class.const_get(pos.to_s.upcase).each do |granular_pos|
-        granular_word_list = word_list[granular_pos]
+        granular_word_list = word_list[granular_pos].to_a
         memo[pos] ||= []
         memo[pos] += granular_word_list
       end
@@ -75,11 +76,11 @@ class RcNameGen
 
   def rc_name
     combination.map do |part_of_speech|
-      words[part_of_speech].sample.capitalize
+      words[part_of_speech].sample
     end
   end
 
   def print_name
-    puts "\nRC #{rc_name.join(' ')}\n\n"
+    puts "\nRC #{rc_name.join(' ').titleize}\n\n"
   end
 end
