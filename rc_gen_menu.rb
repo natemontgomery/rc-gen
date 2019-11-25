@@ -1,8 +1,7 @@
 require 'pry'
 require 'tty-prompt'
 require_relative './rc_name_gen.rb'
-
-MODES = [:normal, :wild]
+require_relative './pos_categories'
 
 prompt = TTY::Prompt.new
 
@@ -13,7 +12,7 @@ pos_options = prompt.collect do
     key(:pos_options).values do
       selected_pos = key(:pos).select(
         "What part of speech would you like for word \##{word_num}?",
-        RcNameGen::PARTS_OF_SPEECH.map { |pos| pos.to_s.capitalize }
+        PosCategories::GENERALIZED_LIST.map { |pos| pos.to_s.capitalize }
       )
 
       if selected_pos == "Noun"
