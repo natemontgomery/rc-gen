@@ -6,18 +6,21 @@ MODES = [:normal, :wild]
 
 prompt = TTY::Prompt.new
 
-word_count = prompt.ask("How many words should be in the RC's name?", default: 2, convert: :int)
-pos_choices = prompt.collect do
+pos_options = prompt.collect do
+  word_count = key(:word_count).ask("How many words should be in the RC's name?", default: 2, convert: :int)
   word_count.times do |idx|
     word_num = (idx + 1).to_s
-    key(word_num.to_sym).select(
-      "What part of speech would you like for word \##{word_num}?",
-      RcNameGen::PARTS_OF_SPEECH.map { |pos| pos.to_s.capitalize }
-    )
+    key(:pos_options).values do
+      selected_pos = key(:pos).select(
+        "What part of speech would you like for word \##{word_num}?",
+        RcNameGen::PARTS_OF_SPEECH.map { |pos| pos.to_s.capitalize }
+      )
+
+      if selected_pos == "Noun"
+        key(:inflection).select("Singular or Plural?", ['Singular', 'Plural'])
+      end
+    end
   end
 end
 
-RcNameGen.new(
-  word_count: word_count,
-  pos_list: pos_choices.values.map { |pos| pos.downcase.to_sym }
-).print_name
+RcNameGen.new(pos_options).print_name

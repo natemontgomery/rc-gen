@@ -1,4 +1,5 @@
 require 'pry'
+require 'dry/inflector'
 require_relative './string_ext'
 
 class RcNameGen
@@ -15,10 +16,10 @@ class RcNameGen
   PRONOUN = ["pron."].freeze
   VERB = ["v.", "v.aux.", "v.refl.", "pres.", "orig."].freeze
   ADVERB = ["adv.", "poss."].freeze
+  PREPOSITION = ["prep."].freeze
 
   ABBREVIATION = ["abbr.", "Abbr.", "Hon.", "Revd."].freeze
   INTERJECTION = ["int."].freeze
-  PREPOSITION = ["prep."].freeze
   PREDICATE = ["predic."].freeze
   CONTRACTION = ["contr."].freeze
   CONJUNCTION = ["conj."].freeze
@@ -40,10 +41,10 @@ class RcNameGen
 
   attr_reader :words, :word_count, :combination
 
-  def initialize(word_count:, pos_list:)
+  def initialize(word_count:, pos_options:)
     @words = words_hash
     @word_count = word_count
-    @combination = pos_list
+    @combination = pos_options
   end
 
   def annotated_words
@@ -75,8 +76,18 @@ class RcNameGen
   end
 
   def rc_name
-    combination.map do |part_of_speech|
-      words[part_of_speech].sample
+    inflector = Dry::Inflector.new
+    combination.map do |pos_options|
+      word = words[pos_options[:pos].downcase.to_sym].sample
+
+      case pos_options[:inflection]
+      when 'Singular'
+        inflector.singularize(word)
+      when 'Plural'
+        inflector.pluralize(word)
+      else
+        word
+      end
     end
   end
 
