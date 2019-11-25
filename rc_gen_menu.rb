@@ -15,8 +15,11 @@ pos_options = prompt.collect do
         PosCategories::GENERALIZED_LIST.map { |pos| pos.to_s.capitalize }
       )
 
-      if selected_pos == "Noun"
+      case selected_pos
+      when "Noun"
         key(:inflection).select("Singular or Plural?", ['Singular', 'Plural'])
+      when "Verb"
+        key(:inflection).select("In what tense?", ['Past', 'Present', 'Future'])
       end
     end
   end

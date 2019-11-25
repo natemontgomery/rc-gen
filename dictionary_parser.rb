@@ -45,6 +45,4 @@ class DictionaryParser
   end
 end
 
-prompt = TTY::Prompt.new
-file_path = prompt.ask("Where is your dictionary file?")
-DictionaryParser.new(dictionary: file_path).output_parsed_dictionary
+DictionaryParser.new(dictionary: '/Users/nathan/misc/rc-gen/shortened-oxford-dictionary').output_parsed_dictionary
