@@ -7,7 +7,7 @@ class RcName < Thor
     RcNameGen.new(mode: :normal).print_name
   end
 
-  desc 'wild_mode', 'Make me somethign wild'
+  desc 'wild_mode', 'Make me something wild'
   def wild_mode
     RcNameGen.new(mode: :wild).print_name
   end
