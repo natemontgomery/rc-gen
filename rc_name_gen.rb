@@ -13,25 +13,74 @@ class RcNameGen
   end
 
   def rc_name
-    inflector = Dry::Inflector.new
-    combination.map do |word_options|
-      word = words[word_options[:pos].downcase.to_sym].sample
+    choose_words
+    build_phrasing
+  end
 
-      case word_options[:inflection]
-      when 'Singular'
-        inflector.singularize(word)
-      when 'Plural'
-        inflector.pluralize(word)
-      when 'Past'
-        Verbs::Conjugator.conjugate(word, tense: :past)
-      when 'Present'
-        Verbs::Conjugator.conjugate(word, tense: :present)
-      when 'Future'
-        Verbs::Conjugator.conjugate(word, tense: :future)
+  def choose_words
+    combination.map do |word_options|
+      pos = word_options[:pos].downcase.to_sym
+      chosen_word = words[pos].sample
+
+      word_options[:word] = if pos == :noun
+        inflect_noun(chosen_word, word_options[:inflection])
+      else
+        chosen_word
+      end
+    end
+  end
+
+  def build_phrasing
+    combination.map do |word_options|
+      pos = word_options[:pos].downcase.to_sym
+      word = word_options[:word]
+
+      case pos
+      when :noun
+        # Remove subject from final word array to allow verb conjugation to work
+        if word_options[:subject] && find_verb
+          nil
+        else
+          word
+        end
+      when :verb
+        conjugate_verb(word, word_options)
       else
         word
       end
+    end.compact
+  end
+
+  def inflect_noun(noun, inflection)
+    inflector = Dry::Inflector.new
+    case inflection
+    when 'Singular'
+      inflector.singularize(noun)
+    when 'Plural'
+      inflector.pluralize(noun)
+    else
+      noun
     end
+  end
+
+  def conjugate_verb(verb, conjugation_options)
+    verb.verb.conjugate(
+      conjugation_options.merge(subject: find_subject).transform_values do |opt|
+        opt.to_s.downcase.to_sym
+      end
+    )
+  end
+
+  def find_subject
+    combination.detect do |subject_options|
+      subject_options[:pos] == 'Noun' && subject_options[:subject]
+    end.to_h[:word]
+  end
+
+  def find_verb
+    combination.detect do |subject_options|
+      subject_options[:pos] == 'Verb'
+    end.to_h[:word]
   end
 
   def print_name
