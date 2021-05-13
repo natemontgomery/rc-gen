@@ -1,4 +1,4 @@
-** RC Name Gen
+## RC Name Gen
 
 Essentially a random phrase generator but with the purpse of generating names for Realease Candidates.
 
