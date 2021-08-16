@@ -7,4 +7,4 @@ gem 'pry'
 gem 'dry-inflector'
 gem 'verbs'
 gem 'tty-prompt'
-gem 'fxruby'
+# gem 'fxruby' # no ui yet

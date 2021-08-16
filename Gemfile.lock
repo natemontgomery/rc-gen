@@ -11,12 +11,9 @@ GEM
     concurrent-ruby (1.1.8)
     dry-inflector (0.2.0)
     ffi (1.15.0-java)
-    fxruby (1.6.44)
-      mini_portile2 (~> 2.1)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     method_source (1.0.0)
-    mini_portile2 (2.5.1)
     minitest (5.14.4)
     pastel (0.8.0)
       tty-color (~> 0.5)
@@ -53,7 +50,6 @@ PLATFORMS
 
 DEPENDENCIES
   dry-inflector
-  fxruby
   pry
   tty-prompt
   verbs
