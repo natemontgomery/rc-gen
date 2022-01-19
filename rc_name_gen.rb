@@ -44,7 +44,7 @@ class RcNameGen
           word
         end
       when :verb
-        conjugate_verb(word, word_options)
+        conjugate_verb(word.verb, word_options)
       else
         word
       end
@@ -64,7 +64,7 @@ class RcNameGen
   end
 
   def conjugate_verb(verb, conjugation_options)
-    verb.verb.conjugate(
+    verb.conjugate(
       conjugation_options.merge(subject: find_subject).transform_values do |opt|
         opt.to_s.downcase.to_sym
       end
