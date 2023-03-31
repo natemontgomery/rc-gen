@@ -42,4 +42,4 @@ pos_options = prompt.collect do
   end
 end
 
-RcNameGen.new(pos_options).print_name
+RcNameGen.new(**pos_options).print_name

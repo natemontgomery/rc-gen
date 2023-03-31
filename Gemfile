@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.7.3'
+ruby '3.1.2'
 
 # gem 'open_nlp' # only works on jruby
 # gem 'thor'
